@@ -11,7 +11,7 @@ const LeftNav = () => {
 
 	return (
 		<Box w="30%" bg="gray.200" minH="100%" p={4}>
-			<Heading size="xl" mb={4}>Student Result Management System</Heading>
+			<Heading size="lg" mb={4}>Student Result Management System</Heading>
             <VStack w='100%'>
                 {navItems.map((item, index) => {
                     return (

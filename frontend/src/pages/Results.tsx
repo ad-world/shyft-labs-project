@@ -1,8 +1,9 @@
-import { Center, Flex, Container, Heading, FormControl, FormLabel, Button, Spinner, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Box, Text, Select, useToast } from "@chakra-ui/react";
+import { Center, Flex, Container, Heading, FormControl, FormLabel, Button, Spinner, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Box, Text, Select, useToast, IconButton } from "@chakra-ui/react";
 import LeftNav from "../components/LeftNav";
 import { useEffect, useState } from "react";
 import { Course, Student, StudentResult } from "../types";
-import { createResult, getCourses, getResults, getStudents } from "../api";
+import { createResult, deleteResult, getCourses, getResults, getStudents } from "../api";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 interface NewResultForm {
     studentId: number | null;
@@ -46,6 +47,21 @@ const Results = () => {
         const students = await getStudents();
         if(students.data) {
             setStudents(students.data)
+        }
+    }
+
+    const removeResult = async (id: number) => {
+        const deleted = await deleteResult(id);
+        if (deleted.data?.message) {
+            toast({
+                title: 'Result Deleted',
+                description: deleted.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'top'
+            })
+            fetchResults();
         }
     }
 
@@ -145,6 +161,7 @@ const Results = () => {
                                         <Th>Student Name</Th>
                                         <Th>Course Name</Th>
                                         <Th>Grade</Th>
+                                        <Th>Actions</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -154,6 +171,7 @@ const Results = () => {
                                                 <Td>{result.first_name} {result.last_name}</Td>
                                                 <Td>{result.course_name}</Td>
                                                 <Td>{result.score}</Td>
+                                                <Td><IconButton colorScheme="red" icon={<DeleteIcon/>} aria-label="delete" onClick={() => removeResult(result.result_id)}/></Td>
                                             </Tr>
                                         )
                                     })}
