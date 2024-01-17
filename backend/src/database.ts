@@ -1,20 +1,20 @@
 import sqlite3 from 'sqlite3'
 import { Database, open } from 'sqlite'
 
-let sql = `
+let students_sql = `
 CREATE TABLE IF NOT EXISTS students (
     student_id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     dob TEXT
-);
+);`
 
-CREATE TABLE IF NOT EXISTS courses (
+let courses_sql = `CREATE TABLE IF NOT EXISTS courses (
     course_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    course_name TEXT NOT NULL,
-);
+    course_name TEXT NOT NULL
+);`
 
-CREATE TABLE IF NOT EXISTS results (
+let results_sql = `CREATE TABLE IF NOT EXISTS results (
     result_id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
@@ -32,7 +32,9 @@ const initDb = async () => {
     });
 
     try {
-        await db.run(sql);
+        await db.run(students_sql);
+        await db.run(courses_sql);
+        await db.run(results_sql);
     } catch (err) {
         console.log(err);
     }
