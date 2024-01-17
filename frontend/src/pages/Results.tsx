@@ -22,9 +22,9 @@ const Results = () => {
         marks: ''
     })
 
-    const [formErrors, setFormErrors] = useState<NewResultForm>({
-        studentId: null,
-        courseId: null,
+    const [formErrors, setFormErrors] = useState({
+        studentId: '',
+        courseId: '',
         marks: ''
     })
 
@@ -51,6 +51,7 @@ const Results = () => {
 
     const createNewResult = async () => {
         if(form.studentId && form.courseId && form.marks) {
+            setFormErrors({ studentId: '', courseId: '', marks: '' })
             const result = await createResult({ student_id: form.studentId, course_id:form.courseId, score: form.marks });
             if(result.data) {
                 toast({
@@ -64,7 +65,23 @@ const Results = () => {
                 setForm({ studentId: null, courseId: null, marks: '' })
             }   
         } else {
-            console.log(form);
+            if (!form.studentId) {
+                setFormErrors((formErrors) => ({ ...formErrors, studentId: 'Student cannot be empty' }))
+            } else {
+                setFormErrors((formErrors) => ({ ...formErrors, studentId: '' }))
+            }
+
+            if(!form.courseId) {
+                setFormErrors((formErrors) => ({ ...formErrors, courseId: 'Course cannot be empty' }))
+            } else {
+                setFormErrors((formErrors) => ({ ...formErrors, courseId: '' }))
+            }
+
+            if(!form.marks) {
+                setFormErrors((formErrors) => ({ ...formErrors, marks: 'Grade cannot be empty' }))
+            } else {
+                setFormErrors((formErrors) => ({ ...formErrors, marks: '' }))
+            }
         }
     }
 
